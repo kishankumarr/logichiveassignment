@@ -1,24 +1,40 @@
-import logo from './logo.svg';
+import React,{useEffect, useState}from "react";
+import {DATA} from "./data.js";
+import {
+  Card, CardImg, CardText, CardBody,
+  CardTitle, CardSubtitle, Button
+} from 'reactstrap';
 import './App.css';
 
 function App() {
+const [data, setData]=useState([]);
+
+useEffect(()=>{
+  fetch("http://localhost:8888/services", {credential:"include"})
+  .then((r)=>r.json())
+  .then(resp=>{
+  setData([...resp])})
+}, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+      <h1 className="header">OUR SERVICES</h1>
+      </div>
+      <div>
+      {data.map((data)=>(
+      <Card width="6%" key={data.id} className="card">
+      <CardImg  width="100%" src={data.image} />
+      <CardBody>
+      <CardTitle classname="cardtitle" tag="h2">{data.title}</CardTitle>
+      <CardText className="line">__________</CardText>
+      <CardText className="cardtext" tag="h5">{data.description}</CardText>
+      </CardBody>
+    </Card>
+     ))}
+     </div>
     </div>
+    
   );
 }
 
